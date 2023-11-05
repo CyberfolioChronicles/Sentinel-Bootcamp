@@ -18,18 +18,18 @@ To deploy the Microsoft Sentinel Training Lab, you must have a Microsoft Azure s
 🎓 Level: 100 (Beginner)
 ⌛ Estimated time to complete this lab: 20 minutes
 
-# Objectives
+### Objectives
 
 This module guides you through the deployment of the Microsoft Sentinel Training Lab
 solution that will be used in all subsequent modules.
 
-# Prerequisites
+### Prerequisites
 
 To get started with Microsoft Sentinel, you must have a Microsoft Azure subscription. If you do not have a subscription, you can sign up for a free account.
 
 Permissions to create a resource group in your Azure subscription.
 
-# Exercise 1: The Microsoft Sentinel workspace
+### Exercise 1: The Microsoft Sentinel workspace
 In this exercise, we will show you how to create a brand-new Microsoft Sentinel workspace. If you already have a pre-existing one that you would like to use, you can skip to Exercise 2.
 
 1. Navigate to the Azure Portal and log in with your account.
@@ -45,7 +45,7 @@ In this exercise, we will show you how to create a brand-new Microsoft Sentinel 
 7. You will be redirected back to the Add Microsoft Sentinel to a workspace. Type the name of your new workspace in the search box, select your workspace and click Add at the bottom.
 Your Microsoft Sentinel workspace is now ready to use!
 
-# Exercise 2: Deploy the Microsoft Sentinel Training Lab
+### Exercise 2: Deploy the Microsoft Sentinel Training Lab
 
 Solution
 
@@ -56,7 +56,7 @@ In this exercise, you will deploy the Training Lab solution into your existing w
 4. Once validation is ok, click on Create. The deployment process takes about 15 minutes, this is because we want to make sure that all the ingested data is ready for you to use once finished.
 5. Once the deployment finishes, you can go back to Microsoft Sentinel and select your workspace. In the home page you should see some ingested data and several recent incidents. Don't worry if you don't see 3 incidents like in the screenshot below, they might take a few minutes to be raised.
 
-# Exercise 3: Configure Microsoft Sentinel Playbook
+### Exercise 3: Configure Microsoft Sentinel Playbook
 
 In this exercise, we will configure a Playbook that will be later used in the lab. This will allow the playbook to access Sentinel.
 
