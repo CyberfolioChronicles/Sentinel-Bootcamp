@@ -25,9 +25,8 @@ solution that will be used in all subsequent modules.
 
 ### Prerequisites
 
-To get started with Microsoft Sentinel, you must have a Microsoft Azure subscription. If you do not have a subscription, you can sign up for a free account.
-
-Permissions to create a resource group in your Azure subscription.
+To get started with Microsoft Sentinel, you must have a Microsoft Azure subscription. If you do not have a subscription, you can sign up for a free account. 
+Permission to create a resource group in your Azure subscription.
 
 ### Exercise 1: The Microsoft Sentinel workspace
 In this exercise, we will show you how to create a brand-new Microsoft Sentinel workspace. If you already have a pre-existing one that you would like to use, you can skip to Exercise 2.
@@ -41,8 +40,8 @@ In this exercise, we will show you how to create a brand-new Microsoft Sentinel 
 ○ Subscription: Choose the Azure subscription where you would like to deploy the Microsoft Sentinel workspace.
 ○ Resource Group: Select an existing resource group or create a new resource group (recommended) that will host the lab resources.
 ○ Region: From the drop-down, select the Azure region where the lab will be located.
-○ Workspace Name: Provide a name for the Microsoft Sentinel workspace. Please note that the workspace name should include 4-63 letters, digits or '-'. The '-' shouldn't be the first or the last symbol. Click Review + create and then Create after the validation completes. The creation takes a few seconds.
-7. You will be redirected back to the Add Microsoft Sentinel to a workspace. Type the name of your new workspace in the search box, select your workspace and click Add at the bottom.
+○ Workspace Name: Provide a name for the Microsoft Sentinel workspace. Please note that the workspace name should include 4-63 letters, digits, or '-'. The '-' shouldn't be the first or the last symbol. Click Review + Create and then Create after the validation completes. The creation takes a few seconds.
+7. You will be redirected back to the Add Microsoft Sentinel to a workspace. Type the name of your new workspace in the search box, select your workspace, and click Add at the bottom.
 Your Microsoft Sentinel workspace is now ready to use!
 
 ### Exercise 2: Deploy the Microsoft Sentinel Training Lab
@@ -52,9 +51,9 @@ Solution
 In this exercise, you will deploy the Training Lab solution into your existing workspace. This will ingest pre-recorded data (~20 MBs) and create several other artifacts that will be used during the exercises.
 1. In the Azure Portal, go to the top search bar and type Microsoft Sentinel Training. Select the Microsoft Sentinel Training Lab Solution (Preview) marketplace item on the right.
 2. Read the solution description and click Create at the top.
-3. In the Basics tab, select the Subscription, Resource Group and Workspace that you created in Exercise 1, or the details for your existing workspace. Optionally, review the different tabs (Workbooks, Analytics, Hunting Queries, Watchlists, Playbooks) in the solution. When ready, click on Review + create.
+3. In the Basics tab, select the Subscription, Resource Group, and Workspace that you created in Exercise 1, or the details for your existing workspace. Optionally, review the different tabs (Workbooks, Analytics, Hunting Queries, Watchlists, Playbooks) in the solution. When ready, click on Review + Create.
 4. Once validation is ok, click on Create. The deployment process takes about 15 minutes, this is because we want to make sure that all the ingested data is ready for you to use once finished.
-5. Once the deployment finishes, you can go back to Microsoft Sentinel and select your workspace. In the home page you should see some ingested data and several recent incidents. Don't worry if you don't see 3 incidents like in the screenshot below, they might take a few minutes to be raised.
+5. Once the deployment finishes, you can go back to Microsoft Sentinel and select your workspace. On the home page, you should see some ingested data and several recent incidents. Don't worry if you don't see 3 incidents like in the screenshot below, they might take a few minutes to be raised.
 
 ### Exercise 3: Configure Microsoft Sentinel Playbook
 
@@ -66,7 +65,7 @@ In this exercise, we will configure a Playbook that will be later used in the la
 4. Click on Authorize and a new window will open to choose an account. Pick the user that you want to authenticate with. This should normally be the same user that you're logged in with.
 5. Click Save.
 
-<h4>Module 2 - Data Connectors</h4>
+<h3>Module 2 - Data Connectors</h3>
 
 🎓 Level: 100 (Beginner)
 ⌛ Estimated time to complete this lab: 15 minutes
@@ -118,5 +117,126 @@ NOTE: To do this exercise, your user must have the Security Reader role in the s
 4. Click Add and wait until the operation completes.
 5. Click on Next Steps at the top of the page and explore what content is available for this connector. In a few seconds, the ThreatIntelligenceIndicator will be populated with IOCs from Anomali's feed.
 
+<h3>Module 3 - Analytics Rules</h3>
 
+🎓 Level: 200 (Intermediate)
+⌛ Estimated time to complete this lab: 30 minutes
+
+### Objectives
+
+This module guides you through the Analytics Rule part in Microsoft Sentinel and shows you how to create different types of rules (Security Detections)
+
+### Prerequisites
+
+This module assumes that you have completed Module 1, as the data and the artifacts that we will be using in this module need to be deployed on your Microsoft Sentinel instance.
+
+### Exercise 1: Analytics Rules Overview
+
+1. Open your newly created Microsoft Sentinel instance.
+2. On the left menu navigate to analytics and select the Rule template section
+3. Review the analytics rules templates that ship with the product.
+4. On the analytics rule filter select Data sources and check Security Events, review all the analytic rules on the above data source.
+5. In the rule search bar type Rare RDP Connections for the rule name.
+6. To review the rule logic and possible configuration options, in the right lower corner press Create Rule.
+7. Review the rule definition like tactics and severity.
+8. Press Next: Set rule logic at the bottom of the page.
+9. In the rule logic screen, you have the ability to create or modify the rule KQL query, control the entity mapping, and define the scheduling and lookback time range.
+10. After you reviewed the rule configuration options, close this page and navigate back to the main Microsoft Sentinel Overview screen.
+
+### Exercise 2: Enable Microsoft incident creation rule
+
+Microsoft Sentinel is a cloud-native SIEM and as such, it acts as a single pane of glass for alerts and event correlation. For this purpose, and to be able to ingest and surface alerts from Microsoft Security Products, we create a Microsoft incident creation rule. In this exercise, we will review this feature and create one example rule with a filtering option to help the analyst deal with alert fatigue.
+1. On Microsoft Sentinel main page press on the Analytics section.
+2. In the top bar press on +Create and select the Microsoft incident creation rule
+3. In the rule name enter "Azure Defender only medium and high Alerts"
+4. In the Microsoft security service dropdown select Azure Defender
+5. In the Filter by severity select Custom and mark High and Medium
+6. Press Next: Automated response
+7. In the above "Automated response" page you can attach an automation rule that can generate automation tasks that can assist your SOC with repetitive tasks, or Security remediation. More on this topic in the SOAR module.
+8. Press Next: Review and Create on the next page.
+
+### Exercise 3: Review Fusion Rule (Advanced Multistage Attack Detection)
+
+The fusion rule is a unique kind of detection rule. With the Fusion rule, Microsoft Sentinel can automatically detect multistage attacks by identifying combinations of anomalous behaviors and suspicious activities That are observed at various stages of the kill chain. In this exercise, we will learn how to distinguish and review the Fusion rule in Microsoft Sentinel.
+1. In the analytics page rule template tab, use the Rule Type filter and select Fusion.
+2. In the template screen notice the tag IN USE as this rule template is enabled by default.
+3. Press on the rule and review the data sources in the rule right pane.
+As Fusion rules produce security incidents with high fidelity and simulation can be challenging, we are adding an example of an incident that was created from fusion detection.
+In the below example, we are seeing 2 low severity alerts from Azure Active Directory
+Identity Protection and Microsoft Cloud App Security stick together in high severity incidence:
+
+### Exercise 4: Create a Microsoft Sentinel custom analytics rule.
+
+Your Security consult notified you about this thread https://www.reddit.com/r/sysadmin/comments/7kyp0a/recent_phishing_attempts_my_experience_and_what/ Based on the attack vector and the organization risk he recommends, you to create detection rule for this malicious activity. In this exercise, you will use the Microsoft Sentinel analytics rule wizard to create new detection.
+1. Review the article in the above link and understand what is the data source that will be part of the detection.
+2. Check if this operation is captured as part of your collection strategy:
+● In the left menu press on the Logs and navigate to the search canvas
+Important note: In this lab, we are using custom logs that replace the Out-off-the-box tables
+Run the search query below to see the list of activities Microsoft Sentinel captured in the last 24 hours.
+
+OfficeActivity_CL
+| distinct Operation_s
+
+● As you can see the New-InboxRule operation is indeed captured in your logs.
+4. In the analytics rule page, in the top bar press on +Create and select scheduled query Rule
+5. In this screen we will add general information regarding this rule.
+6. In the Name type "Malicious Inbox Rule - custom".
+7. In the rule Description add This rule is detecting on delete all traces of phishing emails from user mailboxes.
+8. In the Tactics select Persistence and Defense Evasion.
+9. In the rule severity select medium.
+10. Press Next: SET rule logic. In the Rule logic page, review and copy the query:
+
+let Keywords = dynamic(["helpdesk", " alert", " suspicious", "fake",
+"malicious", "phishing", "spam", "do not click", "do not open", "hijacked",
+"Fatal"]);
+OfficeActivity_CL
+| where Operation_s =~ "New-InboxRule"
+| where Parameters_s has "Deleted Items" or Parameters_s has "Junk Email"
+| extend Events=todynamic(Parameters_s)
+| parse Events with * "SubjectContainsWords" SubjectContainsWords '}'*
+| parse Events with * "BodyContainsWords" BodyContainsWords '}'*
+| parse Events with * "SubjectOrBodyContainsWords" SubjectOrBodyContainsWords
+'}'*
+| where SubjectContainsWords has_any (Keywords)
+or BodyContainsWords has_any (Keywords)
+or SubjectOrBodyContainsWords has_any (Keywords)
+| extend ClientIPAddress = case( ClientIP_s has ".",
+tostring(split(ClientIP_s,":")[0]), ClientIP_s has "[",
+tostring(trim_start(@'[[]',tostring(split(ClientIP_s,"]")[0]))), ClientIP_s )
+| extend Keyword = iff(isnotempty(SubjectContainsWords), SubjectContainsWords,
+(iff(isnotempty(BodyContainsWords),BodyContainsWords,SubjectOrBodyContainsWords
+)))
+| extend RuleDetail = case(OfficeObjectId_s contains '/' ,
+tostring(split(OfficeObjectId_s, '/')[-1]) , tostring(split(OfficeObjectId_s,
+'\\')[-1]))
+| summarize count(), StartTimeUtc = min(TimeGenerated), EndTimeUtc =
+max(TimeGenerated) by Operation_s, UserId__s, ClientIPAddress, ResultStatus_s,
+Keyword, OriginatingServer_s, OfficeObjectId_s, RuleDetail
+
+11. We can view the rule creation estimation by pressing Test with current data on the right side and see the number of hits.
+12. Under the Alert enrichment (Preview), expand the entity mapping section that will allow us to map our fields to well-known categories:
+○ In the Entity type open the supported list of entities and select Account in the identifier select FullName and map it to UserId__s
+○ Press + Add new entity and this time select Host entity in the identifier select FullName and map it to OriginatingServer_s
+○ Press + Add new entity, select IP entity, in the identifier select Address, and map it to ClientIPAddress value. To make your SOC more productive, save analyst time and effectively triage newly created incidents, your SOC analyst asks you to add the affected user from the search results as part of the alert title.
+3. For applying this request, we will use the Alert details feature and create a custom Alert Name Format
+● In the Alert Name Format copy the above dynamic title "Malicious Inbox Rule, affected user {{UserId__s}}"
+4. In the Query scheduling, set the run query every 5 minutes and the Lookup data to last 12 Hours (This scheduling might not be ideal for the production environment and should be tuned). If you deployed the lab more than 12 hours ago, you will need to change the lookback period.
+5. In the Suppression leave it on Off
+6. Press the Next: Incident settings(Preview)
+7. As your SOC is under stress, we want to reduce the number of alerts and be sure that when an analyst handles a specific incident, he/she will see all related events or other incidents related to the same attack story. For that, we will implement an Alert grouping feature. To do so, follow the steps below:
+● In the Incident settings (Preview) under Alert grouping change it to Enabled.
+● Modify the Limit of the group to alerts created within the selected time frame to 12 hours.
+● Select the Grouping alerts into a single incident if the selected entity types and details match and select the Account.
+8. Press the Next: Automated response and also press Next: Review and create this new analytics rule.
+
+### Exercise 5: Review the resulting security incident
+
+After we created the custom analytics rule that detects us for malicious inbox rule rules. Let's review the incident that was created from this analytics rule.
+1. On the main Microsoft Sentinel main page, select incidents and review the incident page.
+2. Locate a new incident with the title " Malicious Inbox Rule, affected user AdeleV@contoso.OnMicrosoft.com " notice that the name adapts and the effected user name is added to the incident name.
+3. In the right pane we can review the incident preview, this view will give us a high-level overview of the incident and the entity that is related to it.
+4. Press on the "View full details"
+5. In the incident full details page you are able to see the alert timeline (effective when you have more than one alert in a given incident).
+6. Check the top-level tabs and press on the entity tab, this section will expose all the mapped entities that are related to this incident.
+7. Press on the entity " AdeleV@contoso.OnMicrosoft.com " This action will navigate us to the user entity page, this page will give us a holistic view of the user entity, with all its activity and related alerts.
 
