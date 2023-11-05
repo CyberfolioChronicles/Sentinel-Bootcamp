@@ -1,4 +1,4 @@
-<h1🛡️ Microsoft Sentinel Lab Series 🛡️></h1>
+<h1>🛡️ Microsoft Sentinel Lab Series 🛡️</h1>
 
 
  ### [YouTube Demonstration Playlist](https://www.youtube.com/playlist?list=PLTNt8j7SunIDfFKRerAPNIGWuj16UfLgO)
