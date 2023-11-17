@@ -451,3 +451,225 @@ using the Investigation Graph the same way that we can investigate an incident.
 3. To create a new incident from the bookmark, select the bookmark and select Incident Actions in the top menu bar and select Create new Incident. Note that you also have the option to attach the bookmark to an existing incident.
 4. Select the Severity for the incident, assign the incident to yourself, and click Create.
 5. Navigate to the incident blade and review the newly promoted incident we just created.
+
+<h3>Module 6 - Watchlists</h3>
+
+🎓 Level: 300 (Intermediate)
+⌛ Estimated time to complete this lab: 20 minutes
+
+### Objectives
+
+This module will show you how to use Microsoft Sentinel watchlists in event correlation and enrichment. Once created, you can use watchlists in your search, detection rules, threat hunting, and response playbooks.
+
+### Prerequisites
+
+This module assumes that you have completed Module 1, as the data and the artifacts that we will be using in this module need to be deployed on your Microsoft Sentinel instance.
+
+### Exercise 1: Create a watchlist
+
+You have received a message from the SOC manager, informing you about a penetration test exercise being performed over the next few weeks. Your manager also informs you that the SIEM is already seeing a bunch of incidents from IP addresses used by the penetration test team. These incidents all come from the rule "High count of connections by client IP on many ports", which identifies when 30 or more ports are used for a given client IP in 10 minutes occurring on the IIS server. Your manager provides you with this CSV file with the list of the IP addresses involved in the penetration exercise.
+
+IPAddress
+23.102.131.33
+82.31.3.4
+64.39.104.113
+52.154.174.208
+20.44.17.10
+217.119.27.212
+
+1. From the Microsoft Sentinel portal, go to the Watchlists menu and click Add New.
+2. In the watchlist wizard enter the following and click Next: Source:
+○ Name: PenTestsIPaddresses
+○ Description: IP addresses used during penetration tests
+○ Watchlist Alias: PenTestIPaddresses
+○ SearchKey field: IPAddress
+3. Download the CSV file to your desktop.
+4. In the watchlist wizard, upload the file from your desktop, check the Results Preview, and click Next: Review and Create.
+5. Click Create to finish the wizard.
+6. You are brought back to the Watchlists screen, where you see your newly created watchlist. The watchlist data takes about 1 minute to be available in the workspace. Wait until the Row number changes from 0 to 6. Then click on View
+in Log Analytics.
+7. You should see the following screen. From the same logs screen, you can also run _GetWatchlistAlias, which will return all defined watchlists.
+
+### Exercise 2: Whitelist IP addresses in the analytics rule
+
+1. Go to Analytics, then Templates and search for "High count of connections". Select the "High count of connections by client IP on many ports" rule and click on the Create rule.
+2. In the Set rule logic step of the wizard, expand the query window.
+3. Add the following KQL statement that brings the IPAddress field from the "PenTestsIPaddresses" watchlist: let PenTestIPaddresses = _GetWatchlist('PenTestIPaddresses') | project IPAddress;
+4. Now add an additional where statement to discard records where the client IP address (cIP field) matches one of the IP addresses in the watchlist. The statement is: | where cIP !in (PenTestIPaddresses)
+5. Continue through the wizard and save the modified rule.
+
+<h3>Module 7 - Threat Intelligence</h3>
+
+🎓 Level: 300 (Intermediate)
+⌛ Estimated time to complete this lab: 20 minutes
+
+### Objectives
+This module will demonstrate how to use Microsoft Sentinel Threat Intelligence (TI) features and product integration points. During this module we rely on TI data that we
+ingested in Module 2, so please make sure you have completed that module. In this module, we will also discover how to visualize and use this data as part of investigation and detection.
+
+### Prerequisites
+This module assumes that you completed Module 1, and Module 2 which enable the Threat Intelligence Platform connector.
+
+### Exercise 1: Threat Intelligence Data Connectors
+For detailed prerequisites and instructions for this connector, you can visit our official doc on this matter Connect your threat intelligence platform to Microsoft Sentinel.
+
+Task 1: Threat Intelligence Platforms (TIP) connector
+This connector is currently in public preview and is based on Third-party Threat Intelligence platform (TIP) solutions like Palo Alto MineMeld, ThreatConnect, and others.
+1. On the left navigation open the connector page and search Threat Intelligence Platforms (Preview).
+2. On the bottom right pane press Open connector page.
+3. Review the connector Prerequisites and notice that to enable this connector, the user needs to be a Global Admin or Security Administrator in the current Azure AD tenant.
+4. Read the configuration section and notice that as part of this connector onboarding, the user needs to create an Azure AD app registration and grant one of the permissions above.
+   
+Task 2: Threat intelligence TAXII connector
+For detailed prerequisites and instructions for this connector, you can visit our official doc on this matter Connect Microsoft Sentinel to STIX/TAXII threat intelligence feeds. In Module 2 we already enabled the TAXII connector in our lab environment, please refer to this module for more information.
+
+### Exercise 2: Explore the Threat Intelligence menu
+As we discussed in the previous exercise, we have several ways to ingest TI data into Microsoft Sentinel. You can use one of the many available integrated Threat Intelligence Platform (TIP) products or you can connect to TAXII servers to take advantage of any STIX-compatible threat intelligence feed. The ingested Indicators of Compromise (IOC) coming from any of these TI feeds are stored in a dedicated table called ThreatIntelligenceIndicator, and visible on the Threat Intelligence menu on the left navigation menu.
+
+Task 1: Review the TI data in the Microsoft Sentinel Logs interface
+1. On the left navigation click on Logs, this will redirect you to the Log Analytics query interface. On the query interface, we can see on the left side the tables with the relevant fields.
+2. Microsoft Sentinel built-in tables have a predefined schema, to be able to see the ThreatIntelligenceIndicator schema, run the following query:
+ThreatIntelligenceIndicator
+| getschema
+3. Let's explore and delve into the TI table. Run the following query which takes 10 records from the table:
+ThreatIntelligenceIndicator
+| take 10
+To understand if a specific IOC is active, we need to have a closer look at the following columns:
+● ExpirationDateTime [UTC]
+● Active
+In our example, we can see that the IOC is an IP that is active with a future Expiration date. This means that our matching detection rules (which we will review in the next exercise) will take this IOC into consideration when correlating with data sources.
+
+Task 2: Review and manage TI IOCs in the Microsoft Sentinel Threat intelligence menu.
+After we ingest our TI data into the ThreatIntelligenceIndicator table, our mission is to review how our SOC can leverage and manage the TI menu to allow us to search, tag, and manage the lifecycle of IOCs.
+1. On the Microsoft Sentinel left menu press Threat Intelligence (Preview). This menu is a visual representation of the ThreatIntelligenceIndicator table.
+2. Select one IOC from the main pane notice that the right pane changed accordingly and present the metadata of the selected IOC.
+3. On the top area of the main blade, we can filter the list of the IOCs based on specific parameters. In our case, we only ingested one type of IOC (IP), but the Type filter allows us to filter based on different types. If we ingested IOCs from multiple TI data sources, the source filter allows us to slice it.
+Task 3: add new TI IOC manually in the Microsoft Sentinel Threat intelligence menu
+Part of the SOC analyst's job is to manually add an IOC to the TI index from time to time. This allows other data sources and detections to correlate and detect interaction with this IOC.
+1. On the Threat Intelligence (Preview) top menu, click on Add New, this will open the New indicator dialog:
+2. In the drop-down, select URL and add this URL: http://phishing.com.
+3. Add tags that will help us to add metadata to this IOC. In our example, we want to tag this IOC with its associated incident ID. On the add tag pop-up write Incident 4326 and press OK.
+4. On the Thread types, select malicious-activity.
+5. Add a Description and set the Confidence level to 80, set up the Valid from date to today and the Valid until two weeks from now.
+6. Press Apply.
+7. Notice to the newly created IOC on the TI menu.
+8. Be aware that every new IOC added to the TI menu will be automatically added to the ThreatIntelligenceIndicator table. You can validate it by opening the Logs
+menu and run the query below.
+ThreatIntelligenceIndicator
+| search "http://phishing.com"
+9. As we want to view the description column, we need to modify the column order for the menu by selecting the column button on the top bar.
+10. Once the Choose columns open on the right side, select Description and click Apply. After a couple of days, we got new information from our internal TI team that this new IOC is not relevant anymore and we need to delete it.
+12. Select the newly created manual IOC and press Delete.
+    
+### Exercise 3: Analytics Rules based on Threat Intelligence data
+
+One of the main values of the TI data is on Analytics rules. In this exercise we will review
+the analytics rules types we have in Microsoft Sentinel that correlate with our ingested TI.
+Task 1: Review and enable TI mapping analytics rules
+1. From the Microsoft Sentinel portal, click on Analytics and then switch to Rule
+Templates tab.
+2. Click on the Data Sources filter and select Threat Intelligence Platforms
+(Preview) and Threat Intelligence - TAXII (Preview). Click OK to apply the filter.
+3. As you can see, there is a long list of resulting alert templates. These all will
+correlate your different data sources with the IOCs present in your TI table
+(ThreatIntelligenceIndicator), to detect any trace of malicious indicators of
+compromise in your organization's logs. You can see more information about
+these rules here.
+4. As you may know, it is free to enable analytics rules in Microsoft Sentinel, so the
+best practice is to enable all the ones that apply to data sources that you are
+ingesting.
+Task 2: Review and enable Threat Intelligence Matching Analytics
+rule
+1. From the Microsoft Sentinel portal, click on Analytics and then switch to Rule
+Templates tab.
+2. Click on the Rule Type filter and select Threat Intelligence. The resulting rule
+template matches Microsoft-generated threat intelligence data with the logs you
+have ingested into Microsoft Sentinel. The alerts are very high fidelity and are
+turned ON by default. Visit this link for more information about this type of rule.
+3. Select the rule template and notice the different data sources that are supported
+(at the time of writing, these are CEF, Syslog and DNS). Click on Create rule.
+4. In the wizard, click on Review and Create.
+Exercise 4: Treat Intelligence workbook
+Workbooks provide powerful interactive dashboards that give you insights into all aspects
+of Microsoft Sentinel, and threat intelligence is no exception. In this exercise you will
+explore a purpose-built workbook to visualize key information about your threat
+intelligence in Microsoft Sentinel.
+1. Select Workbooks from the Threat management section of the Microsoft Sentinel
+menu.
+2. Find the workbook titled Threat Intelligence and verify there's a green check
+mark next to the ThreatIntelligenceIndicator table as shown below.
+3. Select the Save button and choose an Azure location to store the workbook. This
+step is required if you are going to modify the workbook in any way and save your
+changes.
+4. Now select the View saved workbook button to open the workbook for viewing
+and editing.
+5. You will find some pre-built visualizations that show you the indicators imported
+into Sentinel over time, by type and provider. To modify or add a new chart, select
+the Edit button at the top of the page to enter editing mode for the workbook.
+6. Let's now add a new chart of threat indicators by threat type. To do this, scroll to
+the very bottom of the page and select Add Query.
+7. Add the following text to the Log Analytics workspace Log Query text box:
+ThreatIntelligenceIndicator
+| summarize count() by ThreatType
+8. In the Visualization drop-down, select Bar chart.
+9. Select the Done editing button. You’ve created a new chart for your workbook 😀.
+Congratulations, you have completed Module 7!. You can now continue to
+Module 8 - Microsoft Sentinel Solutions
+Module 8 - Microsoft Sentinel Content Hub
+🎓 Level: 100 (Beginner)
+⌛ Estimated time to complete this lab: 20 minutes
+Objectives
+In this module you will learn how to use the Microsoft Sentinel Content Hub to discover
+and deploy new content. Our official documentation on this topic is available here:
+Microsoft Sentinel Content hub catalog.
+Prerequisites
+This module assumes that you have completed Module 1, as you will need a Microsoft
+Sentinel workspace provisioned.
+Exercise 1: Explore Microsoft Sentinel Content hub
+This exercise guides you through the Content Hub catalog.
+1. From the Microsoft Sentinel portal, navigate to Content hub (Preview) under
+Content Management.
+2. In the search bar, type Cloudflare. You will see a single result corresponding to
+Cloudflare solution. You could also search using the filtering options at the top.
+3. Select the Cloudflare solution. As you can see on the right pane, here we have
+information about this solution, like category, pricing, content types included,
+solution provider, version and also who supports it. Click Install.
+4. Notice the different artifacts that are included in this solution: Data Connector,
+Parser, Workbook, Analytics Rules and Hunting Queries. Each Solution can
+contain a different set of artifacts.
+5. Feel free to navigate to other solutions. In the next exercise, we will install one of
+them.
+Exercise 2: Deploy a new solution
+This exercise explains how to install a new solution into your Microsoft Sentinel
+workspace.
+1. From the Microsoft Sentinel portal, navigate to Content hub (preview) under
+Content Management.
+2. In the search bar, type Dynamics. Select on the Continuous Threat Monitoring
+for Dynamics 365 solution and click Install.
+3. Notice the content being added by this solution (Data Connector, Analytics Rules,
+Workbook and Hunting Queries). Also notice the disclaimer, saying that the Data
+Connector is already in the data connectors gallery, so the solution won't deploy
+this data connector. Click on Create.
+4. Select your subscription, resource group and Microsoft Sentinel workspace. Click
+on Next: Workbook.
+5. In the Workbooks tab, type the name for your Workbook. Click on Next:
+Analytics.
+6. Notice the different Analytics Rules that will be added to your workspace. Click
+Next: Hunting Queries.
+7. Notice the Hunting Queries included in the solution. Click Next: Review + create.
+8. A final validation will run. If everything is ok, click on Create button. The
+deployment will kick off and finish in a few seconds.
+Exercise 3: Review and enable deployed artifacts
+1. Return to Microsoft Sentinel home page and navigate to Analytics Rules.
+2. Type Dynamics in the search box. You should see 6 different analytics rules that
+look at Dynamics 365 data.
+3. Notice that these rules are created in Disabled state. In a real-world environment,
+you would need to enable them.
+4. Navigate to Workbooks under Threat Management. Switch to My Workbooks
+tab and search for Dynamics. You can see the newly deployed workbook. This
+should be empty unless you have enabled the Dynamics 365 connector.
+5. Navigate to Hunting and search for dynamics. You should see 2 new queries that
+use data coming from Dynamics 365.
+Summary
+In this module you learned how to use the Microsoft Sentinel content hub to bring new
+content into your workspace
