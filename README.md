@@ -563,113 +563,75 @@ ThreatIntelligenceIndicator
     
 ### Exercise 3: Analytics Rules based on Threat Intelligence data
 
-One of the main values of the TI data is on Analytics rules. In this exercise we will review
-the analytics rules types we have in Microsoft Sentinel that correlate with our ingested TI.
+One of the main values of the TI data is on Analytics rules. In this exercise, we will review the analytics rules types we have in Microsoft Sentinel that correlate with our ingested TI.
+
 Task 1: Review and enable TI mapping analytics rules
-1. From the Microsoft Sentinel portal, click on Analytics and then switch to Rule
-Templates tab.
-2. Click on the Data Sources filter and select Threat Intelligence Platforms
-(Preview) and Threat Intelligence - TAXII (Preview). Click OK to apply the filter.
-3. As you can see, there is a long list of resulting alert templates. These all will
-correlate your different data sources with the IOCs present in your TI table
-(ThreatIntelligenceIndicator), to detect any trace of malicious indicators of
-compromise in your organization's logs. You can see more information about
-these rules here.
-4. As you may know, it is free to enable analytics rules in Microsoft Sentinel, so the
-best practice is to enable all the ones that apply to data sources that you are
+1. From the Microsoft Sentinel portal, click on Analytics and then switch to the Rule Templates tab.
+2. Click on the Data Sources filter and select Threat Intelligence Platforms (Preview) and Threat Intelligence - TAXII (Preview). Click OK to apply the filter.
+3. As you can see, there is a long list of resulting alert templates. These all will correlate your different data sources with the IOCs present in your TI table (ThreatIntelligenceIndicator), to detect any trace of malicious indicators of compromise in your organization's logs. You can see more information about these rules here.
+4. As you may know, it is free to enable analytics rules in Microsoft Sentinel, so the best practice is to enable all the ones that apply to data sources that you are
 ingesting.
-Task 2: Review and enable Threat Intelligence Matching Analytics
-rule
-1. From the Microsoft Sentinel portal, click on Analytics and then switch to Rule
-Templates tab.
-2. Click on the Rule Type filter and select Threat Intelligence. The resulting rule
-template matches Microsoft-generated threat intelligence data with the logs you
-have ingested into Microsoft Sentinel. The alerts are very high fidelity and are
-turned ON by default. Visit this link for more information about this type of rule.
-3. Select the rule template and notice the different data sources that are supported
-(at the time of writing, these are CEF, Syslog and DNS). Click on Create rule.
+
+Task 2: Review and enable the Threat Intelligence Matching Analytics rule
+1. From the Microsoft Sentinel portal, click on Analytics and then switch to the Rule Templates tab.
+2. Click on the Rule Type filter and select Threat Intelligence. The resulting rule template matches Microsoft-generated threat intelligence data with the logs you have ingested into Microsoft Sentinel. The alerts are very high fidelity and are turned ON by default. Visit this link for more information about this type of rule.
+3. Select the rule template and notice the different data sources that are supported (at the time of writing, these are CEF, Syslog and DNS). Click on Create rule.
 4. In the wizard, click on Review and Create.
-Exercise 4: Treat Intelligence workbook
-Workbooks provide powerful interactive dashboards that give you insights into all aspects
-of Microsoft Sentinel, and threat intelligence is no exception. In this exercise you will
-explore a purpose-built workbook to visualize key information about your threat
-intelligence in Microsoft Sentinel.
-1. Select Workbooks from the Threat management section of the Microsoft Sentinel
-menu.
-2. Find the workbook titled Threat Intelligence and verify there's a green check
-mark next to the ThreatIntelligenceIndicator table as shown below.
-3. Select the Save button and choose an Azure location to store the workbook. This
-step is required if you are going to modify the workbook in any way and save your
-changes.
-4. Now select the View saved workbook button to open the workbook for viewing
-and editing.
-5. You will find some pre-built visualizations that show you the indicators imported
-into Sentinel over time, by type and provider. To modify or add a new chart, select
-the Edit button at the top of the page to enter editing mode for the workbook.
-6. Let's now add a new chart of threat indicators by threat type. To do this, scroll to
-the very bottom of the page and select Add Query.
+
+### Exercise 4: Treat Intelligence workbook
+
+Workbooks provide powerful interactive dashboards that give you insights into all aspects of Microsoft Sentinel, and threat intelligence is no exception. In this exercise, you will explore a purpose-built workbook to visualize key information about your threat intelligence in Microsoft Sentinel.
+1. Select Workbooks from the Threat management section of the Microsoft Sentinel menu.
+2. Find the workbook titled Threat Intelligence and verify there's a green check mark next to the ThreatIntelligenceIndicator table as shown below.
+3. Select the Save button and choose an Azure location to store the workbook. This step is required if you are going to modify the workbook in any way and save your changes.
+4. Now select the View saved workbook button to open the workbook for viewing and editing.
+5. You will find some pre-built visualizations that show you the indicators imported into Sentinel over time, by type and provider. To modify or add a new chart, select the Edit button at the top of the page to enter editing mode for the workbook.
+6. Let's now add a new chart of threat indicators by threat type. To do this, scroll to the very bottom of the page and select Add Query.
 7. Add the following text to the Log Analytics workspace Log Query text box:
 ThreatIntelligenceIndicator
 | summarize count() by ThreatType
-8. In the Visualization drop-down, select Bar chart.
-9. Select the Done editing button. You’ve created a new chart for your workbook 😀.
-Congratulations, you have completed Module 7!. You can now continue to
-Module 8 - Microsoft Sentinel Solutions
-Module 8 - Microsoft Sentinel Content Hub
+9. In the Visualization drop-down, select Bar chart.
+10. Select the Done editing button. You’ve created a new chart for your workbook 😀.
+
+<h3>Module 8 - Microsoft Sentinel Content Hub</h3>
+
 🎓 Level: 100 (Beginner)
 ⌛ Estimated time to complete this lab: 20 minutes
-Objectives
-In this module you will learn how to use the Microsoft Sentinel Content Hub to discover
-and deploy new content. Our official documentation on this topic is available here:
-Microsoft Sentinel Content hub catalog.
-Prerequisites
-This module assumes that you have completed Module 1, as you will need a Microsoft
-Sentinel workspace provisioned.
-Exercise 1: Explore Microsoft Sentinel Content hub
+
+### Objectives
+In this module, you will learn how to use the Microsoft Sentinel Content Hub to discover and deploy new content. 
+
+### Prerequisites
+This module assumes that you have completed Module 1, as you will need a Microsoft Sentinel workspace provisioned.
+
+### Exercise 1: Explore Microsoft Sentinel Content hub
+
 This exercise guides you through the Content Hub catalog.
-1. From the Microsoft Sentinel portal, navigate to Content hub (Preview) under
-Content Management.
-2. In the search bar, type Cloudflare. You will see a single result corresponding to
-Cloudflare solution. You could also search using the filtering options at the top.
-3. Select the Cloudflare solution. As you can see on the right pane, here we have
-information about this solution, like category, pricing, content types included,
-solution provider, version and also who supports it. Click Install.
-4. Notice the different artifacts that are included in this solution: Data Connector,
-Parser, Workbook, Analytics Rules and Hunting Queries. Each Solution can
-contain a different set of artifacts.
-5. Feel free to navigate to other solutions. In the next exercise, we will install one of
-them.
-Exercise 2: Deploy a new solution
-This exercise explains how to install a new solution into your Microsoft Sentinel
-workspace.
-1. From the Microsoft Sentinel portal, navigate to Content hub (preview) under
-Content Management.
-2. In the search bar, type Dynamics. Select on the Continuous Threat Monitoring
-for Dynamics 365 solution and click Install.
-3. Notice the content being added by this solution (Data Connector, Analytics Rules,
-Workbook and Hunting Queries). Also notice the disclaimer, saying that the Data
-Connector is already in the data connectors gallery, so the solution won't deploy
-this data connector. Click on Create.
-4. Select your subscription, resource group and Microsoft Sentinel workspace. Click
-on Next: Workbook.
-5. In the Workbooks tab, type the name for your Workbook. Click on Next:
-Analytics.
-6. Notice the different Analytics Rules that will be added to your workspace. Click
-Next: Hunting Queries.
-7. Notice the Hunting Queries included in the solution. Click Next: Review + create.
-8. A final validation will run. If everything is ok, click on Create button. The
-deployment will kick off and finish in a few seconds.
-Exercise 3: Review and enable deployed artifacts
-1. Return to Microsoft Sentinel home page and navigate to Analytics Rules.
-2. Type Dynamics in the search box. You should see 6 different analytics rules that
-look at Dynamics 365 data.
-3. Notice that these rules are created in Disabled state. In a real-world environment,
-you would need to enable them.
-4. Navigate to Workbooks under Threat Management. Switch to My Workbooks
-tab and search for Dynamics. You can see the newly deployed workbook. This
-should be empty unless you have enabled the Dynamics 365 connector.
-5. Navigate to Hunting and search for dynamics. You should see 2 new queries that
-use data coming from Dynamics 365.
-Summary
-In this module you learned how to use the Microsoft Sentinel content hub to bring new
-content into your workspace
+
+1. From the Microsoft Sentinel portal, navigate to Content Hub (Preview) under Content Management.
+2. In the search bar, type Cloudflare. You will see a single result corresponding to the Cloudflare solution. You could also search using the filtering options at the top.
+3. Select the Cloudflare solution. As you can see on the right pane, here we have information about this solution, like category, pricing, content types included, solution provider, version and also who supports it. Click Install.
+4. Notice the different artifacts that are included in this solution: Data Connector, Parser, Workbook, Analytics Rules, and Hunting Queries. Each Solution can contain a different set of artifacts.
+5. Feel free to navigate to other solutions. In the next exercise, we will install one of them.
+
+### Exercise 2: Deploy a new solution
+
+This exercise explains how to install a new solution into your Microsoft Sentinel workspace.
+
+1. From the Microsoft Sentinel portal, navigate to Content Hub (preview) under Content Management.
+2. In the search bar, type Dynamics. Select the Continuous Threat Monitoring for Dynamics 365 solution and click Install.
+3. Notice the content being added by this solution (Data Connector, Analytics Rules, Workbook, and Hunting Queries). Also notice the disclaimer, saying that the Data Connector is already in the data connectors gallery, so the solution won't deploy this data connector. Click on Create.
+4. Select your subscription, resource group, and Microsoft Sentinel workspace. Click on Next: Workbook.
+5. In the Workbooks tab, type the name of your Workbook. Click on Next: Analytics.
+6. Notice the different Analytics Rules that will be added to your workspace. Click Next: Hunting Queries.
+7. Notice the Hunting Queries included in the solution. Click Next: Review + Create.
+8. A final validation will run. If everything is ok, click on the Create button. The deployment will kick off and finish in a few seconds.
+
+### Exercise 3: Review and enable deployed artifacts
+
+1. Return to the Microsoft Sentinel home page and navigate to Analytics Rules.
+2. Type Dynamics in the search box. You should see 6 different analytics rules that look at Dynamics 365 data.
+3. Notice that these rules are created in a Disabled state. In a real-world environment, you would need to enable them.
+4. Navigate to Workbooks under Threat Management. Switch to the My Workbooks tab and search for Dynamics. You can see the newly deployed workbook. This should be empty unless you have enabled the Dynamics 365 connector.
+5. Navigate to Hunting and search for dynamics. You should see 2 new queries that use data coming from Dynamics 365.
+
