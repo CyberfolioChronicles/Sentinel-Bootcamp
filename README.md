@@ -514,19 +514,22 @@ This module assumes that you completed Module 1, and Module 2 which enable the T
 For detailed prerequisites and instructions for this connector, you can visit our official doc on this matter Connect your threat intelligence platform to Microsoft Sentinel.
 
 Task 1: Threat Intelligence Platforms (TIP) connector
+
 This connector is currently in public preview and is based on Third-party Threat Intelligence platform (TIP) solutions like Palo Alto MineMeld, ThreatConnect, and others.
 1. On the left navigation open the connector page and search Threat Intelligence Platforms (Preview).
 2. On the bottom right pane press Open connector page.
 3. Review the connector Prerequisites and notice that to enable this connector, the user needs to be a Global Admin or Security Administrator in the current Azure AD tenant.
 4. Read the configuration section and notice that as part of this connector onboarding, the user needs to create an Azure AD app registration and grant one of the permissions above.
-   
+
 Task 2: Threat intelligence TAXII connector
+
 For detailed prerequisites and instructions for this connector, you can visit our official doc on this matter Connect Microsoft Sentinel to STIX/TAXII threat intelligence feeds. In Module 2 we already enabled the TAXII connector in our lab environment, please refer to this module for more information.
 
 ### Exercise 2: Explore the Threat Intelligence menu
 As we discussed in the previous exercise, we have several ways to ingest TI data into Microsoft Sentinel. You can use one of the many available integrated Threat Intelligence Platform (TIP) products or you can connect to TAXII servers to take advantage of any STIX-compatible threat intelligence feed. The ingested Indicators of Compromise (IOC) coming from any of these TI feeds are stored in a dedicated table called ThreatIntelligenceIndicator, and visible on the Threat Intelligence menu on the left navigation menu.
 
 Task 1: Review the TI data in the Microsoft Sentinel Logs interface
+
 1. On the left navigation click on Logs, this will redirect you to the Log Analytics query interface. On the query interface, we can see on the left side the tables with the relevant fields.
 2. Microsoft Sentinel built-in tables have a predefined schema, to be able to see the ThreatIntelligenceIndicator schema, run the following query:
 ThreatIntelligenceIndicator
@@ -535,11 +538,14 @@ ThreatIntelligenceIndicator
 ThreatIntelligenceIndicator
 | take 10
 To understand if a specific IOC is active, we need to have a closer look at the following columns:
+
 ● ExpirationDateTime [UTC]
 ● Active
+
 In our example, we can see that the IOC is an IP that is active with a future Expiration date. This means that our matching detection rules (which we will review in the next exercise) will take this IOC into consideration when correlating with data sources.
 
 Task 2: Review and manage TI IOCs in the Microsoft Sentinel Threat intelligence menu.
+
 After we ingest our TI data into the ThreatIntelligenceIndicator table, our mission is to review how our SOC can leverage and manage the TI menu to allow us to search, tag, and manage the lifecycle of IOCs.
 1. On the Microsoft Sentinel left menu press Threat Intelligence (Preview). This menu is a visual representation of the ThreatIntelligenceIndicator table.
 2. Select one IOC from the main pane notice that the right pane changed accordingly and present the metadata of the selected IOC.
@@ -566,6 +572,7 @@ ThreatIntelligenceIndicator
 One of the main values of the TI data is on Analytics rules. In this exercise, we will review the analytics rules types we have in Microsoft Sentinel that correlate with our ingested TI.
 
 Task 1: Review and enable TI mapping analytics rules
+
 1. From the Microsoft Sentinel portal, click on Analytics and then switch to the Rule Templates tab.
 2. Click on the Data Sources filter and select Threat Intelligence Platforms (Preview) and Threat Intelligence - TAXII (Preview). Click OK to apply the filter.
 3. As you can see, there is a long list of resulting alert templates. These all will correlate your different data sources with the IOCs present in your TI table (ThreatIntelligenceIndicator), to detect any trace of malicious indicators of compromise in your organization's logs. You can see more information about these rules here.
@@ -573,6 +580,7 @@ Task 1: Review and enable TI mapping analytics rules
 ingesting.
 
 Task 2: Review and enable the Threat Intelligence Matching Analytics rule
+
 1. From the Microsoft Sentinel portal, click on Analytics and then switch to the Rule Templates tab.
 2. Click on the Rule Type filter and select Threat Intelligence. The resulting rule template matches Microsoft-generated threat intelligence data with the logs you have ingested into Microsoft Sentinel. The alerts are very high fidelity and are turned ON by default. Visit this link for more information about this type of rule.
 3. Select the rule template and notice the different data sources that are supported (at the time of writing, these are CEF, Syslog and DNS). Click on Create rule.
